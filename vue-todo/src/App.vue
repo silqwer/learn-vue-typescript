@@ -1,27 +1,24 @@
 <template>
   <div>
     <header>
-      <h1>Vue Todo with Typescript</h1>
+      <h1>Vue todod with typescript</h1>
     </header>
     <main>
-      <TodoInput
+      <todo-input
         :item="todoText"
         @input="updateTodoText"
         @add="addTodoItem"
-      ></TodoInput>
+      ></todo-input>
       <div>
         <ul>
           <TodoListItem
             v-for="(todoItem, index) in todoItems"
             :key="index"
-            :index="index"
             :todoItem="todoItem"
-            @toggle="toggleTodoItemComplete"
+            :index="index"
             @remove="removeTodoItem"
+            @toggle="toggleTodoItem"
           ></TodoListItem>
-          <!-- <li>아이템 1</li>
-          <li>아이템 2</li>
-          <li>아이템 3</li> -->
         </ul>
       </div>
     </main>
@@ -46,6 +43,7 @@ const storage = {
   }
 };
 
+// 객체를 위한 타입
 export interface Todo {
   title: string;
   done: boolean;
@@ -59,7 +57,28 @@ export default Vue.extend({
       todoItems: [] as Todo[]
     };
   },
+  created() {
+    this.fetchTodoItems();
+  },
   methods: {
+    toggleTodoItem(todoItem: Todo, index: number) {
+      this.todoItems.splice(index, 1, {
+        title: todoItem.title,
+        done: !todoItem.done
+      });
+      storage.save(this.todoItems);
+    },
+    removeTodoItem(index: number) {
+      this.todoItems.splice(index, 1);
+      storage.save(this.todoItems);
+    },
+    fetchTodoItems() {
+      this.todoItems = storage.fetch().sort((a: Todo, b: Todo) => {
+        if (a.title < b.title) return -1;
+        else if (a.title > b.title) return 1;
+        else return 0;
+      });
+    },
     updateTodoText(value: string) {
       this.todoText = value;
     },
@@ -71,40 +90,11 @@ export default Vue.extend({
       };
       this.todoItems.push(todo);
       storage.save(this.todoItems);
-      // localStorage.setItem(value, value);
       this.initTodoText();
     },
     initTodoText() {
       this.todoText = "";
-    },
-    fetchTodoItems() {
-      // this.todoItems = 1;
-      this.todoItems = storage.fetch().sort((a, b) => {
-        if (a.title < b.title) {
-          return -1;
-        }
-        if (a.title > b.title) {
-          return 1;
-        }
-        return 0;
-      });
-      return "hi";
-    },
-    removeTodoItem(index: number) {
-      console.log("remove", index);
-      this.todoItems.splice(index, 1);
-      storage.save(this.todoItems);
-    },
-    toggleTodoItemComplete(todoItem: Todo, index: number) {
-      this.todoItems.splice(index, 1, {
-        ...todoItem,
-        done: !todoItem.done
-      });
-      storage.save(this.todoItems);
     }
-  },
-  created() {
-    this.fetchTodoItems();
   }
 });
 </script>

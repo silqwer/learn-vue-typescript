@@ -8,27 +8,31 @@
 </template>
 
 <script lang="ts">
-import { Todo } from "@/App.vue";
 import Vue, { PropType } from "vue";
+import { Todo } from "../App.vue";
 
 export default Vue.extend({
   props: {
-    todoItem: Object as PropType<Todo>,
-    index: Number
+    todoItem: {
+      type: Object as PropType<Todo>,
+      required: true
+    },
+    index: {
+      type: Number,
+      required: true
+    }
   },
-
+  methods: {
+    removeItem() {
+      this.$emit("remove", this.index);
+    },
+    toggleItem() {
+      this.$emit("toggle", this.todoItem, this.index);
+    }
+  },
   computed: {
     todoItemClass(): string | null {
       return this.todoItem.done ? "complete" : null;
-    }
-  },
-
-  methods: {
-    toggleItem() {
-      this.$emit("toggle", this.todoItem, this.index);
-    },
-    removeItem() {
-      this.$emit("remove", this.index);
     }
   }
 });
