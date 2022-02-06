@@ -7,13 +7,12 @@
     </transition>
   </div>
 </template>
-
-<script>
+<script lang="ts">
+import Vue from "vue";
 import ToolBar from "./components/ToolBar.vue";
 import Spinner from "./components/Spinner.vue";
-import bus from "./utils/bus.js";
-
-export default {
+import bus from "./utils/bus";
+export default Vue.extend({
   components: {
     ToolBar,
     Spinner,
@@ -35,7 +34,7 @@ export default {
     bus.$on("on:progress", this.onProgress);
     bus.$on("off:progress", this.offProgress);
   },
-};
+});
 </script>
 
 <style>

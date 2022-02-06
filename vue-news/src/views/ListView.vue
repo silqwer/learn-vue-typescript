@@ -1,19 +1,34 @@
 <template>
   <div>
-    <list-item></list-item>
+    <ListItem :items="newItems"></ListItem>
   </div>
 </template>
-
-<script>
-import ListItem from '../components/ListItem.vue';
-
-export default {
+<script lang="ts">
+import Vue from "vue";
+import { fetchNews } from "@/api";
+import ListItem from "../components/ListItem.vue";
+export default Vue.extend({
   components: {
-    ListItem
+    ListItem,
   },
-}
+
+  data() {
+    return {
+      newItems: [],
+    };
+  },
+
+  methods: {
+    async fetchNewsItems() {
+      const response = await fetchNews();
+      this.newItems = response.data;
+    },
+  },
+
+  created() {
+    this.fetchNewsItems();
+  },
+});
 </script>
 
-<style>
-
-</style>
+<style></style>
