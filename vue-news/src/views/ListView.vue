@@ -7,6 +7,7 @@
 import Vue from "vue";
 import { fetchNews } from "@/api";
 import ListItem from "../components/ListItem.vue";
+import { NewsItem } from "@/ts/Types";
 export default Vue.extend({
   components: {
     ListItem,
@@ -14,7 +15,7 @@ export default Vue.extend({
 
   data() {
     return {
-      newItems: [],
+      newItems: [] as NewsItem[],
     };
   },
 
