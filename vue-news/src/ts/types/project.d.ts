@@ -1,5 +1,5 @@
+import { MyStore } from "@/store/types";
 import Vue from "vue";
-import { MyStore } from "../../store/types";
 
 declare module "vue/types/vue" {
   interface Vue {
